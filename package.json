@@ -1,0 +1,30 @@
+{
+  "name": "sadpeak",
+  "version": "0.0.1",
+  "description": "discord bot written in discord.js for communication with csgo servers",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sadpeak/sadpeak-discord-bot-csgo.git"
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "discord.js",
+    "csgo"
+  ],
+  "author": "sadpeak",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/Sadpeak/sadpeak-discord-bot-csgo/issues"
+  },
+  "homepage": "https://github.com/Sadpeak/sadpeak-discord-bot-csgo#readme",
+  "dependencies": {
+    "discord.js": "^12.3.1",
+    "dotenv": "^8.2.0",
+    "mysql": "^2.18.1"
+  }
+}
