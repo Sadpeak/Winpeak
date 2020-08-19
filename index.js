@@ -66,21 +66,21 @@ client.on('message', message => {
           if (err) throw err; 
          
           
-          connection.query('SELECT name, value FROM lvl_base ORDER BY value DESC LIMIT 10', function (error, results, fields) {
-            
+          connection.query('SELECT name, value, kills, deaths, shoots, hits, playtime FROM lvl_base ORDER BY value DESC LIMIT 10', function (error, results, fields) {
+                console.log(results);
                 const exampleEmbed = new Discord.MessageEmbed()
-                    .setColor('#0099ff')
+                    .setColor('#33FFFF')
                     .setTitle(`Топ 10 сервера ${args[0]}`)
-                    .addField(`1: ${results[0].name}`,`${results[0].value} exp`, false)
-                    .addField(`2: ${results[1].name}`,`${results[1].value} exp`, false)
-                    .addField(`3: ${results[2].name}`,`${results[2].value} exp`, false)
-                    .addField(`4: ${results[3].name}`,`${results[3].value} exp`, false)
-                    .addField(`5: ${results[4].name}`,`${results[4].value} exp`, false)
-                    .addField(`6: ${results[5].name}`,`${results[5].value} exp`, false)
-                    .addField(`7: ${results[6].name}`,`${results[6].value} exp`, false)
-                    .addField(`8: ${results[7].name}`,`${results[7].value} exp`, false)
-                    .addField(`9: ${results[8].name}`,`${results[8].value} exp`, false)
-                    .addField(`10: ${results[9].name}`,`${results[9].value} exp`, false)
+                    .addField(`1: ${results[0].name}: ${results[0].value} exp`,`KDR: ${parseFloat(results[0].kills/results[0].deaths).toFixed(2)}. accuracy: ${parseFloat((results[0].hits/results[0].shoots)*100).toFixed(2)}% online: ${parseFloat(results[0].playtime/60/60).toFixed(2)} hours`, false)
+                    .addField(`2: ${results[1].name}: ${results[1].value} exp`,`KDR: ${parseFloat(results[1].kills/results[1].deaths).toFixed(2)}. accuracy: ${parseFloat((results[1].hits/results[1].shoots)*100).toFixed(2)}% online: ${parseFloat(results[1].playtime/60/60).toFixed(2)} hours`, false)
+                    .addField(`3: ${results[2].name}: ${results[1].value} exp`,`KDR: ${parseFloat(results[2].kills/results[2].deaths).toFixed(2)}. accuracy: ${parseFloat((results[2].hits/results[2].shoots)*100).toFixed(2)}% online: ${parseFloat(results[2].playtime/60/60).toFixed(2)} hours`, false)
+                    .addField(`4: ${results[3].name}: ${results[1].value} exp`,`KDR: ${parseFloat(results[3].kills/results[3].deaths).toFixed(2)}. accuracy: ${parseFloat((results[3].hits/results[3].shoots)*100).toFixed(2)}% online: ${parseFloat(results[3].playtime/60/60).toFixed(2)} hours`, false)
+                    .addField(`5: ${results[4].name}: ${results[1].value} exp`,`KDR: ${parseFloat(results[4].kills/results[4].deaths).toFixed(2)}. accuracy: ${parseFloat((results[4].hits/results[4].shoots)*100).toFixed(2)}% online: ${parseFloat(results[4].playtime/60/60).toFixed(2)} hours`, false)
+                    .addField(`6: ${results[5].name}: ${results[1].value} exp`,`KDR: ${parseFloat(results[5].kills/results[5].deaths).toFixed(2)}. accuracy: ${parseFloat((results[5].hits/results[5].shoots)*100).toFixed(2)}% online: ${parseFloat(results[5].playtime/60/60).toFixed(2)} hours`, false)
+                    .addField(`7: ${results[6].name}: ${results[1].value} exp`,`KDR: ${parseFloat(results[6].kills/results[6].deaths).toFixed(2)}. accuracy: ${parseFloat((results[6].hits/results[6].shoots)*100).toFixed(2)}% online: ${parseFloat(results[6].playtime/60/60).toFixed(2)} hours`, false)
+                    .addField(`8: ${results[7].name}: ${results[1].value} exp`,`KDR: ${parseFloat(results[7].kills/results[7].deaths).toFixed(2)}. accuracy: ${parseFloat((results[7].hits/results[7].shoots)*100).toFixed(2)}% online: ${parseFloat(results[7].playtime/60/60).toFixed(2)} hours`, false)
+                    .addField(`9: ${results[8].name}: ${results[1].value} exp`,`KDR: ${parseFloat(results[8].kills/results[8].deaths).toFixed(2)}. accuracy: ${parseFloat((results[8].hits/results[8].shoots)*100).toFixed(2)}% online: ${parseFloat(results[8].playtime/60/60).toFixed(2)} hours`, false)
+                    .addField(`10: ${results[9].name}: ${results[1].value} exp`,`KDR: ${parseFloat(results[9].kills/results[9].deaths).toFixed(2)}. accuracy: ${parseFloat((results[9].hits/results[9].shoots)*100).toFixed(2)}% online: ${parseFloat(results[9].playtime/60/60).toFixed(2)} hours`, false)
                     .setTimestamp()
                     .setFooter('made by sadpeak', 'https://i.imgur.com/wSTFkRM.png');
 
@@ -88,6 +88,9 @@ client.on('message', message => {
                 
           });
         });
+    }
+    else {
+        message.channel.send("Используй $top [server]\nДоступные сервера на данный момент: public, arena, awp");
     }
 
 });
