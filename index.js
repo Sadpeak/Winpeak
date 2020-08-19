@@ -19,7 +19,7 @@ client.once("ready", () => {
 let publicPool = mysql.createPool({
   host     : process.env.DB_HOST_PUBLIC,
   user     : process.env.DB_USER_PUBLIC,
-  port	   : process.env.DB_PORT_PUBLIC,
+  port     : process.env.DB_PORT_PUBLIC,
   password : process.env.DB_PASS_PUBLIC,
   database : process.env.DB_DATABASE_PUBLIC
 });
@@ -30,17 +30,25 @@ let arenaPool = mysql.createPool({
   password : process.env.DB_PASS_ARENA,
   database : process.env.DB_DATABASE_ARENA
 });
+let awpPool = mysql.createPool({
+  host     : process.env.DB_HOST_AWP,
+  user     : process.env.DB_USER_AWP,
+  port     : process.env.DB_PORT_AWP,
+  password : process.env.DB_PASS_AWP,
+  database : process.env.DB_DATABASE_AWP
+});
 
 pools = {
     public: publicPool,
-    arena: arenaPool
+    arena: arenaPool,
+    awp: awpPool
 };
 
 
 
 //discord bot
 client.on('message', message => {
-	console.log(message.author.username,':',message.content);
+    console.log(message.author.username,':',message.content);
 
 
     const prefix = "$";
@@ -51,7 +59,7 @@ client.on('message', message => {
 
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const cmd = args.shift().toLowerCase();
-    if (cmd === "top" && args[0] == 'public' || args[0] == 'arena') {
+    if (cmd === "top" && args[0] == 'public' || args[0] == 'arena' || args[0] == 'awp') {
         let pool = pools[args];
 
         pool.getConnection(function(err, connection) {
@@ -62,7 +70,7 @@ client.on('message', message => {
             
                 const exampleEmbed = new Discord.MessageEmbed()
                     .setColor('#0099ff')
-                    .setTitle('Топ 10 сервера tut doljno bit nazvanie ego')
+                    .setTitle(`Топ 10 сервера ${args[0]}`)
                     .addField(`1: ${results[0].name}`,`${results[0].value} exp`, false)
                     .addField(`2: ${results[1].name}`,`${results[1].value} exp`, false)
                     .addField(`3: ${results[2].name}`,`${results[2].value} exp`, false)
