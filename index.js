@@ -1,9 +1,8 @@
-require('dotenv').config()
+
 const Discord = require('discord.js');
-const mysql = require('mysql');
+require('dotenv').config()
+const {get_top} = require('./utils/database.js');
 
-
-//databases
 
 const client = new Discord.Client();
 
@@ -14,35 +13,6 @@ client.once("ready", () => {
         activity: {name: 'with your life'}
     })
 });
-
-
-let publicPool = mysql.createPool({
-  host     : process.env.DB_HOST_PUBLIC,
-  user     : process.env.DB_USER_PUBLIC,
-  port     : process.env.DB_PORT_PUBLIC,
-  password : process.env.DB_PASS_PUBLIC,
-  database : process.env.DB_DATABASE_PUBLIC
-});
-let arenaPool = mysql.createPool({
-  host     : process.env.DB_HOST_ARENA,
-  user     : process.env.DB_USER_ARENA,
-  port     : process.env.DB_PORT_ARENA,
-  password : process.env.DB_PASS_ARENA,
-  database : process.env.DB_DATABASE_ARENA
-});
-let awpPool = mysql.createPool({
-  host     : process.env.DB_HOST_AWP,
-  user     : process.env.DB_USER_AWP,
-  port     : process.env.DB_PORT_AWP,
-  password : process.env.DB_PASS_AWP,
-  database : process.env.DB_DATABASE_AWP
-});
-
-pools = {
-    public: publicPool,
-    arena: arenaPool,
-    awp: awpPool
-};
 
 
 
@@ -60,15 +30,10 @@ client.on('message', message => {
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const cmd = args.shift().toLowerCase();
     if (cmd === "top" && args[0] == 'public' || args[0] == 'arena' || args[0] == 'awp') {
-        let pool = pools[args];
 
-        pool.getConnection(function(err, connection) {
-          if (err) throw err; 
-         
-          
-          connection.query('SELECT name, value, kills, deaths, shoots, hits, playtime FROM lvl_base ORDER BY value DESC LIMIT 10', function (error, results, fields) {
+              get_top(args[0]).then(results => {
                 console.log(results);
-                const exampleEmbed = new Discord.MessageEmbed()
+                const topEmbed = new Discord.MessageEmbed()
                     .setColor('#33FFFF')
                     .setTitle(`Топ 10 сервера ${args[0]}`)
                     .addField(`1: ${results[0].name}: ${results[0].value} exp`,`KDR: ${parseFloat(results[0].kills/results[0].deaths).toFixed(2)}. accuracy: ${parseFloat((results[0].hits/results[0].shoots)*100).toFixed(2)}% online: ${parseFloat(results[0].playtime/60/60).toFixed(2)} hours`, false)
@@ -84,16 +49,13 @@ client.on('message', message => {
                     .setTimestamp()
                     .setFooter('made by sadpeak', 'https://i.imgur.com/wSTFkRM.png');
 
-                    message.channel.send(exampleEmbed);
+                    message.channel.send(topEmbed);
                 
-          });
-        });
-    }
-    else {
-        message.channel.send("Используй $top [server]\nДоступные сервера на данный момент: public, arena, awp");
-    }
+          
 
+    }).catch(e => console.error(e));
+  } else {
+    message.channel.send("Используй $top [server]\nДоступные сервера на данный момент: public, arena, awp");
+  }
 });
 client.login(process.env.TOKEN);
-
-
