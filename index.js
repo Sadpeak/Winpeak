@@ -2,6 +2,8 @@
 const Discord = require('discord.js');
 require('dotenv').config()
 const {get_top} = require('./utils/database.js');
+const {get_online} = require('./utils/database.js');
+
 
 
 const client = new Discord.Client();
@@ -29,7 +31,8 @@ client.on('message', message => {
 
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const cmd = args.shift().toLowerCase();
-    if (cmd === "top" && args[0] == 'public' || args[0] == 'arena' || args[0] == 'awp') {
+    if (cmd === "top") {
+      if (args[0] == 'public' || args[0] == 'arena' || args[0] == 'awp') {
 
               get_top(args[0]).then(results => {
                 console.log(results);
@@ -54,8 +57,23 @@ client.on('message', message => {
           
 
     }).catch(e => console.error(e));
-  } else {
-    message.channel.send("Используй $top [server]\nДоступные сервера на данный момент: public, arena, awp");
+  }} if (cmd === "online" && args[0] == 'public' || args[0] == 'arena' || args[0] == 'awp'){
+    get_online(args[0]).then(status => {
+      let str = Array.from(status.match(/\s".*(["])\s/g));
+      let msg = [];
+      let curOnline = status.match(/players : \d+/).toString().split('players : ').pop();
+      for(let i = 0; i < curOnline; i++) {
+        msg += `**` + str[i].replace(/["]/g, ' ') +`**\n`
+      }
+      const onlineEmbed = new Discord.MessageEmbed()
+      .setColor('#33FFFF')
+      .setTitle(`онлайн на сервере ${args[0]} ${curOnline}/30`)
+      .addField(`Текущая карта на сервере:`, `${status.match(/map     :\s.*/)}`);
+      message.channel.send(msg,onlineEmbed);
+    }).catch(e => console.error(e));
+  }
+      else {
+    message.channel.send("Используй $top [server] или $online [server]\nДоступные сервера на данный момент: public, arena, awp");
   }
 });
 client.login(process.env.TOKEN);

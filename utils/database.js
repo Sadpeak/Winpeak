@@ -1,7 +1,15 @@
 const mysql = require('mysql');
 require('dotenv').config({path: '../.env'})
+let Rcon = require('srcds-rcon');
 
+process.env.IP_ARENA
+process.env.RCON_ARENA
 
+process.env.IP_PUBLIC
+process.env.RCON_PUBLIC
+
+process.env.IP_AWP
+process.env.RCON_AWP
 
 let publicPool = mysql.createPool({
     host     : process.env.DB_HOST_PUBLIC,
@@ -31,6 +39,25 @@ let publicPool = mysql.createPool({
       awp: awpPool
   };
 
+  publicP = {
+    IP: process.env.IP_PUBLIC ,
+    RCON: process.env.RCON_PUBLIC 
+  }
+  arenaP = {
+      IP: process.env.IP_ARENA,
+      RCON: process.env.RCON_ARENA
+  }
+  awpP = {
+      IP: process.env.IP_AWP,
+      RCON: process.env.RCON_ARENA
+  }
+  
+  onlinePools = {
+    public: publicP,
+    arena: arenaP,
+    awp: awpP
+  }
+
 module.exports.get_top = function (server) {
     let pool = pools[server];
     return new Promise((resolve, reject) => {
@@ -44,4 +71,24 @@ module.exports.get_top = function (server) {
             });
         } else reject('Unknown server');
     });
+}
+
+module.exports.get_online = function (serverArg) {
+    let server = onlinePools[serverArg];
+
+    return new Promise((resolve, reject) => {
+    let rcon = Rcon({
+        address: server.IP,
+        password: server.RCON
+    });
+    rcon.connect().then(() => {
+        return rcon.command('status').then(status => resolve(status))
+        
+    }).then(
+        () => rcon.disconnect()
+    ).catch(err => {
+        console.log('caught', err);
+        console.log(err.stack);
+    });
+})
 }
