@@ -57,7 +57,9 @@ client.on('message', message => {
           
 
     }).catch(e => console.error(e));
-  }} if (cmd === "online" && args[0] == 'public' || args[0] == 'arena' || args[0] == 'awp'){
+  }} 
+    if (cmd === 'online'){
+      if(args[0] == 'public' || args[0] == 'arena' || args[0] == 'awp') {
     get_online(args[0]).then(status => {
       let str = Array.from(status.match(/\s".*(["])\s/g));
       let msg = [];
@@ -71,8 +73,9 @@ client.on('message', message => {
       .addField(`Текущая карта на сервере:`, `${status.match(/map     :\s.*/)}`);
       message.channel.send(msg,onlineEmbed);
     }).catch(e => console.error(e));
+    }
   }
-      else {
+   if (cmd == 'help'){
     message.channel.send("Используй $top [server] или $online [server]\nДоступные сервера на данный момент: public, arena, awp");
   }
 });
