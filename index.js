@@ -45,7 +45,7 @@ client.on('message', message => {
           .setColor('#33FFFF')
           .setTitle(`Топ 10 сервера ${args[0]}`)
         for (let i = 0; i < 10; i++) {
-          topEmbed.addField(`1: ${results[i].name}: ${results[i].value} exp`, `KDR: ${parseFloat(results[i].kills / results[i].deaths).toFixed(2)}. accuracy: ${parseFloat((results[i].hits / results[i].shoots) * 100).toFixed(2)}% online: ${parseFloat(results[i].playtime / 60 / 60).toFixed(2)} hours`, false)
+          topEmbed.addField(`${i + 1}: ${results[i].name}: ${results[i].value} exp`, `KDR: ${parseFloat(results[i].kills / results[i].deaths).toFixed(2)}. accuracy: ${parseFloat((results[i].hits / results[i].shoots) * 100).toFixed(2)}% online: ${parseFloat(results[i].playtime / 60 / 60).toFixed(2)} hours`, false)
         }
         topEmbed.setTimestamp()
         topEmbed.setFooter('made by sadpeak', 'https://i.imgur.com/wSTFkRM.png');
