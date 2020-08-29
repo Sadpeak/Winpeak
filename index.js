@@ -45,7 +45,7 @@ client.on('message', message => {
           .setColor('#33FFFF')
           .setTitle(`Топ 10 сервера ${args[0]}`)
         for (let i = 0; i < 10; i++) {
-          topEmbed.addField(`1: ${results[0].name}: ${results[0].value} exp`, `KDR: ${parseFloat(results[i].kills / results[i].deaths).toFixed(2)}. accuracy: ${parseFloat((results[i].hits / results[i].shoots) * 100).toFixed(2)}% online: ${parseFloat(results[i].playtime / 60 / 60).toFixed(2)} hours`, false)
+          topEmbed.addField(`1: ${results[i].name}: ${results[i].value} exp`, `KDR: ${parseFloat(results[i].kills / results[i].deaths).toFixed(2)}. accuracy: ${parseFloat((results[i].hits / results[i].shoots) * 100).toFixed(2)}% online: ${parseFloat(results[i].playtime / 60 / 60).toFixed(2)} hours`, false)
         }
         topEmbed.setTimestamp()
         topEmbed.setFooter('made by sadpeak', 'https://i.imgur.com/wSTFkRM.png');
@@ -74,13 +74,15 @@ client.on('message', message => {
         onlineEmbed.addField(`Текущая карта на сервере:`, `${status.match(/map     :\s.*/)}`);
         message.channel.send(onlineEmbed);
       }).catch(e => console.error(e));
+    } else {
+      message.channel.send('На сервере нет никого онлайн');
     }
   }
 
 
   if (cmd === 'cmd') {
     if (args[0] == 'public' || args[0] == 'arena' || args[0] == 'awp') {
-      if (message.author.id = '215418064412344321') {
+      if ((message.author.id == '215418064412344321' || message.author.id == '334840965409931267')) {
         exec_cmd(args[0], args[1]).then(result => {
           message.channel.send(result);
         }).catch(e => console.error(e));
