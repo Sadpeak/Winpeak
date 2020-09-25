@@ -22,7 +22,7 @@ client.once("ready", () => {
 client.on('message', message => {
   console.log(message.author.username, ':', message.content);
 
-  const prefix = "$";
+  const prefix = "!";
 
   if (message.author.bot) return;
   if (!message.guild) return;
@@ -83,10 +83,19 @@ client.on('message', message => {
   if (cmd === 'cmd') {
     if (args[0] == 'public' || args[0] == 'arena' || args[0] == 'awp') {
       if ((message.author.id == '215418064412344321' || message.author.id == '334840965409931267')) {
-        exec_cmd(args[0], args[1]).then(result => {
-          message.channel.send(result);
-        }).catch(e => console.error(e));
-
+        if (args[1] === 'status') {
+          exec_cmd(args[0], args[1]).then(result => {
+            const res = new Discord.MessageEmbed();
+            res.setDescription(result.match(/# \d+.*(["])/g))
+            message.channel.send(res);
+          }).catch(e => console.error(e));
+        } else {
+          exec_cmd(args[0], args[1]).then(result => {
+            const res = new Discord.MessageEmbed();
+            res.setDescription(result)
+            message.channel.send(res);
+          }).catch(e => console.error(e));
+        }
       }
       else {
         message.channel.send('You don\'t have permission for this command');

@@ -87,8 +87,7 @@ module.exports.get_online = function (serverArg) {
         }).then(
             () => rcon.disconnect()
         ).catch(err => {
-            console.log('caught', err);
-            console.log(err.stack);
+            reject(console.log(`caught ${err} ${err.stack}`));
         });
     })
 }
