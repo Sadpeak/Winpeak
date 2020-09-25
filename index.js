@@ -22,7 +22,7 @@ client.once("ready", () => {
 client.on('message', message => {
   console.log(message.author.username, ':', message.content);
 
-  const prefix = "!";
+  const prefix = "$";
 
   if (message.author.bot) return;
   if (!message.guild) return;
@@ -60,17 +60,14 @@ client.on('message', message => {
   if (cmd === 'online') {
     if (args[0] == 'public' || args[0] == 'arena' || args[0] == 'awp') {
       get_online(args[0]).then(status => {
-        let str = Array.from(status.match(/\s".*(["])\s/g));
-        let steamid = Array.from(status.match(/STEAM_\d:\d:\d*/g));
+
         let curOnline = status.match(/players : \d+/).toString().split('players : ').pop();
 
         const onlineEmbed = new Discord.MessageEmbed()
           .setColor('#33FFFF')
           .setTitle(`онлайн на сервере ${args[0]} ${curOnline}/30`)
 
-        for (let i = 0; i < curOnline; i++) {
-          onlineEmbed.addField(`**` + str[i].replace(/["]/g, ' ') + `**\n`, steamid[i])
-        }
+        onlineEmbed.setDescription(status.match(/(["]).*(["])/g));
         onlineEmbed.addField(`Текущая карта на сервере:`, `${status.match(/map     :\s.*/)}`);
         message.channel.send(onlineEmbed);
       }).catch(e => console.error(e));
