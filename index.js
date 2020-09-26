@@ -68,7 +68,7 @@ client.on('message', message => {
           .setTitle(`онлайн на сервере ${args[0]} ${curOnline}/30`)
         
         onlineEmbed.setDescription(status.match(/ (["]).*(["]) /g).join('\n').replace(/ (["])/g, '**').replace(/(["]) /g , '**'));
-        onlineEmbed.addField(`Текущая карта на сервере:`, `${status.match(/map     :\s.*/)}`);
+        onlineEmbed.addField(`Текущая карта на сервере:`, `***${status.match(/map     :\s.*/)}***`.replace(/map     :\s\w*\/\d*\//, ''));
         message.channel.send(onlineEmbed);
       }).catch(e => console.error(e));
     } else {
