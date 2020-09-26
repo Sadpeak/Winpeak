@@ -22,7 +22,7 @@ client.once("ready", () => {
 client.on('message', message => {
   console.log(message.author.username, ':', message.content);
 
-  const prefix = "$";
+  const prefix = "!";
 
   if (message.author.bot) return;
   if (!message.guild) return;
@@ -66,8 +66,8 @@ client.on('message', message => {
         const onlineEmbed = new Discord.MessageEmbed()
           .setColor('#33FFFF')
           .setTitle(`онлайн на сервере ${args[0]} ${curOnline}/30`)
-
-        onlineEmbed.setDescription(status.match(/(["]).*(["])/g));
+        
+        onlineEmbed.setDescription(status.match(/ (["]).*(["]) /g).join('\n').replace(/ (["])/g, '**').replace(/(["]) /g , '**'));
         onlineEmbed.addField(`Текущая карта на сервере:`, `${status.match(/map     :\s.*/)}`);
         message.channel.send(onlineEmbed);
       }).catch(e => console.error(e));
