@@ -1,4 +1,3 @@
-
 const Discord = require('discord.js');
 require('dotenv').config()
 const { get_top } = require('./utils/database.js');
@@ -22,7 +21,7 @@ client.once("ready", () => {
 client.on('message', message => {
   console.log(message.author.username, ':', message.content);
 
-  const prefix = "!";
+  const prefix = "$";
 
   if (message.author.bot) return;
   if (!message.guild) return;
@@ -66,8 +65,8 @@ client.on('message', message => {
         const onlineEmbed = new Discord.MessageEmbed()
           .setColor('#33FFFF')
           .setTitle(`онлайн на сервере ${args[0]} ${curOnline}/30`)
-        
-        onlineEmbed.setDescription(status.match(/ (["]).*(["]) /g).join('\n').replace(/ (["])/g, '**').replace(/(["]) /g , '**'));
+
+        onlineEmbed.setDescription(status.match(/ (["]).*(["]) /g).join('\n').replace(/ (["])/g, ' ').replace(/(["]) /g , ' '));
         onlineEmbed.addField(`Текущая карта на сервере:`, `***${status.match(/map     :\s.*/)}***`.replace(/map     :\s\w*\/\d*\//, ''));
         message.channel.send(onlineEmbed);
       }).catch(e => console.error(e));
@@ -79,7 +78,7 @@ client.on('message', message => {
 
   if (cmd === 'cmd') {
     if (args[0] == 'public' || args[0] == 'arena' || args[0] == 'awp') {
-      if ((message.author.id == '215418064412344321' || message.author.id == '334840965409931267')) {
+      if ((message.author.id == '215418064412344321' || message.author.id == '334840965409931267' || message.author.id == '242198684731703297')) {
         if (args[1] === 'status') {
           exec_cmd(args[0], args[1]).then(result => {
             const res = new Discord.MessageEmbed();
